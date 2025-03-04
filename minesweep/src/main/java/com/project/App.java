@@ -10,6 +10,7 @@ import com.almasb.fxgl.entity.Entity;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -70,7 +71,12 @@ public class App extends GameApplication {
 
 @Override
 protected void initGame() {
+    int spacing = 40;
+
     GridPane grid = new GridPane();
+    grid.setHgap(spacing);
+    grid.setVgap(spacing);
+    grid.setPadding(new Insets(spacing));
     for (int y = 0; y < GRID_SIZE_IN_CELLS; y++) {
         for (int x = 0; x < GRID_SIZE_IN_CELLS; x++) {
             Cell cell = new Cell(x, y);
