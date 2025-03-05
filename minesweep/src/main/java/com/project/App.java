@@ -23,6 +23,8 @@ import javafx.scene.paint.Color;
 public class App extends GameApplication {
     private static int GRID_SIZE_IN_CELLS = 5;
     private static int CELL_SIZE = 70;
+    private static int score = 0;
+    private static Text scoreText;
     
     
     public static void main(String[] args) {
@@ -52,7 +54,7 @@ public class App extends GameApplication {
             if (game.cells[rowChoice - 1][colChoice - 1] == Minesweeper.IS_MINE) {
                 game.displayField();
                 System.out.println("Game Over!");
-                gameOver = true;  // End the game
+                gameOver = true;
             } else {
                 System.out.println("You're safe.");
             }
@@ -83,8 +85,14 @@ protected void initGame() {
             grid.add(cell, x, y);
         }
     }
-    
-    FXGL.getGameScene().addUINode(grid);
+    scoreText = new Text("Score: 0");
+        scoreText.setFont(Font.font(18));
+        scoreText.setFill(Color.BLACK);
+        scoreText.setTranslateX(750);
+        scoreText.setTranslateY(30);  
+
+        FXGL.getGameScene().addUINode(grid);
+        FXGL.getGameScene().addUINode(scoreText);
 }
 
 private static class Cell extends StackPane {
@@ -123,20 +131,28 @@ private static class Cell extends StackPane {
     }*/
         private static int score = 0;
         public void reveal() {
-        if (isFlipped) return; // Prevent re-revealing
+        if (isFlipped) return;
         isFlipped = true;
         bg.setFill(Color.WHITE);
     
-        boolean isBomb = Math.random() < 0.2; // 20% chance of a bomb
+        boolean isBomb = Math.random() < 0.1; // 20% chance of a bomb
         symbol.setText(isBomb ? "💣" : ""); // Set symbol
     
         if (isBomb) {
-            System.out.println("Boom! Game Over!");
-            FXGL.getGameController().exit(); // Quit game
+            score -= 10;
+            System.out.println("HAH YOU GOT BOMB!");
         } else {
-            score += 5; // Increase score by 5
-            System.out.println("Score: " + score); // Print score
+            score += 5;
+            scoreText.setText("Score: " + score);
+            System.out.println("Score: " + score);
+        } 
+        scoreText.setText("Score: " + score);
+
+        if (score <= 0) {
+            System.out.println("Boom! Game Over!");
+            FXGL.getGameController().exit();
         }
+        
     }
     }
 
