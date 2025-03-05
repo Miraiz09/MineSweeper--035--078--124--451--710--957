@@ -72,7 +72,6 @@ public class App extends GameApplication {
 @Override
 protected void initGame() {
     int spacing = 40;
-
     GridPane grid = new GridPane();
     grid.setHgap(spacing);
     grid.setVgap(spacing);
