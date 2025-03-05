@@ -21,8 +21,10 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 
 public class App extends GameApplication {
-    private static int GRID_SIZE_IN_CELLS = 4;
-    private static int CELL_SIZE = 100;
+    private static int GRID_SIZE_IN_CELLS = 5;
+    private static int CELL_SIZE = 70;
+    
+    
     public static void main(String[] args) {
         launch(args);
         Minesweeper game = initMineFieldFromFile("minefield/minefield01.txt");
@@ -34,9 +36,9 @@ public class App extends GameApplication {
         boolean gameOver = false;
         while (!gameOver) {
             game.displayField();
-            System.out.println("Choose a row (1-9): ");
+            System.out.print("Choose a row (1-9): ");
             int rowChoice = scanner.nextInt();
-            System.out.println("Choose a column (1-9): ");
+            System.out.print("Choose a column (1-9): ");
             int colChoice = scanner.nextInt();
 
             if (rowChoice < 1 || rowChoice > 9 || colChoice < 1 || colChoice > 9) {
@@ -67,7 +69,6 @@ public class App extends GameApplication {
         settings.setVersion("0.3");
         settings.setMainMenuEnabled(true);
     }
-
 
 @Override
 protected void initGame() {
@@ -109,12 +110,34 @@ private static class Cell extends StackPane {
         setOnMouseClicked(e -> reveal());
     }
 
+        /*public void reveal() {
+        if (isFlipped) return;
+        isFlipped = true;
+        bg.setFill(Color.WHITE);
+        
+        symbol.setText(Math.random() < 0.2 ? "💣" : "");
+        
+
+        
+    }
+    }*/
+        private static int score = 0;
         public void reveal() {
-            if (isFlipped) return;
-            isFlipped = true;
-            bg.setFill(Color.WHITE);
-            symbol.setText(Math.random() < 0.2 ? "💣" : "");
+        if (isFlipped) return; // Prevent re-revealing
+        isFlipped = true;
+        bg.setFill(Color.WHITE);
+    
+        boolean isBomb = Math.random() < 0.2; // 20% chance of a bomb
+        symbol.setText(isBomb ? "💣" : ""); // Set symbol
+    
+        if (isBomb) {
+            System.out.println("Boom! Game Over!");
+            FXGL.getGameController().exit(); // Quit game
+        } else {
+            score += 5; // Increase score by 5
+            System.out.println("Score: " + score); // Print score
         }
+    }
     }
 
 
