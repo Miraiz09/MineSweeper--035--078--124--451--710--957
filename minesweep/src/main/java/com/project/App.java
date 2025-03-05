@@ -17,50 +17,27 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class App extends GameApplication {
     private static int GRID_SIZE_IN_CELLS = 5;
     private static int CELL_SIZE = 70;
     private static int score = 0;
     private static Text scoreText;
+    private static int remainingCells = GRID_SIZE_IN_CELLS * GRID_SIZE_IN_CELLS;
+    
     
     
     public static void main(String[] args) {
         launch(args);
-        Minesweeper game = initMineFieldFromFile("minefield/minefield01.txt");
+
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("Welcome to Minesweeper!");
 
-        // Main game loop
-        boolean gameOver = false;
-        while (!gameOver) {
-            game.displayField();
-            System.out.print("Choose a row (1-9): ");
-            int rowChoice = scanner.nextInt();
-            System.out.print("Choose a column (1-9): ");
-            int colChoice = scanner.nextInt();
-
-            if (rowChoice < 1 || rowChoice > 9 || colChoice < 1 || colChoice > 9) {
-                System.out.println("Invalid input. Please select both a row and a column between 1 and 9.");
-                continue;
-            }
-
-            game.revealCell(rowChoice - 1, colChoice - 1);
-
-            // Check if the game is over
-            if (game.cells[rowChoice - 1][colChoice - 1] == Minesweeper.IS_MINE) {
-                game.displayField();
-                System.out.println("Game Over!");
-                gameOver = true;
-            } else {
-                System.out.println("You're safe.");
-            }
-        }
-
-        scanner.close();
     }
 
     @Override
@@ -94,6 +71,39 @@ protected void initGame() {
         FXGL.getGameScene().addUINode(grid);
         FXGL.getGameScene().addUINode(scoreText);
 }
+
+private static void showWinScreen() {
+    Text winText = new Text("YOU WIN!");
+    winText.setFont(Font.font(50));
+    winText.setFill(Color.RED);
+    winText.setTextAlignment(TextAlignment.CENTER);
+    
+    winText.setTranslateX(900 / 2 - 100);
+    winText.setTranslateY(900 / 2);
+
+    FXGL.getGameScene().addUINode(winText);
+
+    FXGL.runOnce(() -> {
+        FXGL.getGameController().exit();
+    }, Duration.seconds(5));
+}
+
+private static void showLoseScreen() {
+    Text winText = new Text("YOU LOSE!");
+    winText.setFont(Font.font(50));
+    winText.setFill(Color.RED);
+    winText.setTextAlignment(TextAlignment.CENTER);
+
+    winText.setTranslateX(900 / 2 - 100);
+    winText.setTranslateY(900 / 2);
+
+    FXGL.getGameScene().addUINode(winText);
+
+    FXGL.runOnce(() -> {
+        FXGL.getGameController().exit();
+    }, Duration.seconds(5));
+}
+
 
 private static class Cell extends StackPane {
     private int x;
@@ -129,13 +139,12 @@ private static class Cell extends StackPane {
         
     }
     }*/
-        private static int score = 0;
-        public void reveal() {
+    public void reveal() {
         if (isFlipped) return;
         isFlipped = true;
         bg.setFill(Color.WHITE);
     
-        boolean isBomb = Math.random() < 0.1; // 20% chance of a bomb
+        boolean isBomb = Math.random() < 0.5; // 10% chance of a bomb
         symbol.setText(isBomb ? "💣" : ""); // Set symbol
     
         if (isBomb) {
@@ -143,17 +152,23 @@ private static class Cell extends StackPane {
             System.out.println("HAH YOU GOT BOMB!");
         } else {
             score += 5;
+            App.remainingCells--;
             scoreText.setText("Score: " + score);
             System.out.println("Score: " + score);
-        } 
+        }
+    
         scoreText.setText("Score: " + score);
-
+    
         if (score <= 0) {
             System.out.println("Boom! Game Over!");
-            FXGL.getGameController().exit();
+            FXGL.runOnce(() -> App.showLoseScreen(), Duration.seconds(0.5));
         }
-        
+    
+        if (score >= 80) {
+            FXGL.runOnce(() -> App.showWinScreen(), Duration.seconds(0.5));
+        }
     }
+
     }
 
 
