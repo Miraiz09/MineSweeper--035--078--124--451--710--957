@@ -184,12 +184,12 @@ public class App extends GameApplication {
 
     // Show lose message (YOU LOSE)
     static void showLoseScreen() {
-        Text winText = new Text("NICE TRY LOSER XD");
+        Text winText = new Text("NICE TRY XD");
         winText.setFont(Font.font(50));
         winText.setFill(Color.RED);  // Set the color to red
         winText.setTextAlignment(TextAlignment.CENTER);
 
-        winText.setTranslateX(900 / 3 - 45);
+        winText.setTranslateX(900 / 3 - 23);
         winText.setTranslateY(900 / 2);
 
         FXGL.getGameScene().addUINode(winText);
