@@ -64,7 +64,6 @@ public class App extends GameApplication {
         startButton.setTranslateX(320);
         startButton.setTranslateY(350);
 
-        // Action when the start button is clicked
         startButton.setOnAction(e -> {
             try {
                 numberOfMines = Integer.parseInt(mineInput.getText());  // Get the number of mines
@@ -160,7 +159,6 @@ public class App extends GameApplication {
                 FXGL.runOnce(() -> App.showLoseScreen(), Duration.seconds(0.5));
             }
 
-            // Check if the game is won (score > 30)
             if (score > 30) {
                 FXGL.runOnce(() -> App.showWinScreen(), Duration.seconds(0.5));
             }
@@ -169,12 +167,12 @@ public class App extends GameApplication {
 
     // Show win message (YOU WIN)
     static void showWinScreen() {
-        Text winText = new Text("YOU WIN!");
+        Text winText = new Text("YOU WIN ! :D ");
         winText.setFont(Font.font(50));
         winText.setFill(Color.GREEN);  // Set the color to green
         winText.setTextAlignment(TextAlignment.CENTER);
 
-        winText.setTranslateX(900 / 2 - 100);
+        winText.setTranslateX(900 / 3 - 30);
         winText.setTranslateY(900 / 2);
 
         FXGL.getGameScene().addUINode(winText);
@@ -186,12 +184,12 @@ public class App extends GameApplication {
 
     // Show lose message (YOU LOSE)
     static void showLoseScreen() {
-        Text winText = new Text("YOU LOSE!");
+        Text winText = new Text("NICE TRY LOSER XD");
         winText.setFont(Font.font(50));
         winText.setFill(Color.RED);  // Set the color to red
         winText.setTextAlignment(TextAlignment.CENTER);
 
-        winText.setTranslateX(900 / 2 - 100);
+        winText.setTranslateX(900 / 3 - 45);
         winText.setTranslateY(900 / 2);
 
         FXGL.getGameScene().addUINode(winText);
