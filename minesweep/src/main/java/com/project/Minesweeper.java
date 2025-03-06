@@ -1,7 +1,7 @@
 package com.project;
 
-    import java.util.Scanner;
 import java.io.InputStream;
+import java.util.Scanner;
 
 public class Minesweeper {
     static char SAFE_CELL = '.';
@@ -15,11 +15,13 @@ public class Minesweeper {
     boolean[][] revealed;
     String fieldFileName;
 
+    // Constructor to initialize from file
     public Minesweeper(String fieldFile) {
         this.fieldFileName = fieldFile;
         initFromFile(fieldFileName);
     }
 
+    // Constructor to initialize an empty minefield of given size
     public Minesweeper(int fieldX, int fieldY) {
         this.fieldX = fieldX;
         this.fieldY = fieldY;
@@ -33,6 +35,7 @@ public class Minesweeper {
         }
     }
 
+    // Display the current field (with hidden cells shown as '*')
     void displayField() {
         for (int i = 0; i < fieldX; i++) {
             for (int j = 0; j < fieldY; j++) {
@@ -50,10 +53,12 @@ public class Minesweeper {
         }
     }
 
+    // Set a mine at specific coordinates
     void setMineCell(int x, int y) {
         cells[x][y] = IS_MINE;
     }
 
+    // Initialize the minefield from a file
     void initFromFile(String mineFieldFile) {
         InputStream is = getClass().getClassLoader().getResourceAsStream(mineFieldFile);
         if (is == null) {
@@ -76,16 +81,21 @@ public class Minesweeper {
         }
     }
 
-    void revealCell(int row, int col) {
-        if (revealed[row][col]) {
-            System.out.println("Cell already revealed!");
-            return;
-        }
-        revealed[row][col] = true;
-
-        if (cells[row][col] == IS_MINE) {
-            System.out.println("Boom! You hit a mine!");
+    // Set random mines in the field
+    void setRandomMines(int numberOfMines) {
+        int minesPlaced = 0;
+        while (minesPlaced < numberOfMines) {
+            int x = (int) (Math.random() * fieldX);
+            int y = (int) (Math.random() * fieldY);
+            if (cells[x][y] == IS_SAFE) {
+                cells[x][y] = IS_MINE;
+                minesPlaced++;
+            }
         }
     }
-    
+
+    // Return the type of cell (safe or mine)
+    public int getCell(int x, int y) {
+        return cells[x][y];
+    }
 }
